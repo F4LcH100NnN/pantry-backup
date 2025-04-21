@@ -17,12 +17,13 @@ jobs:
         run: |
           curl -s https://pantrydb.onrender.com/api/items > backup.json
 
-      - name: Commit and push backup
+      - name: Commit and push backup to pantry-ui
         run: |
           git config user.name "Pantry Backup Bot"
           git config user.email "bot@pantry.local"
           git add backup.json
           git diff --quiet && git diff --staged --quiet || git commit -m "Backup $(date)"
-          git push
+          git remote add publish https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/F4LcH100NnN/pantry-ui.git
+          git push publish HEAD:main
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
