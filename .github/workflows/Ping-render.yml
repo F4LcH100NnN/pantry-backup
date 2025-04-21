@@ -2,12 +2,12 @@ name: Keep Render Awake
 
 on:
   schedule:
-    - cron: '*/1 * * * *'
+    - cron: '*/1 * * * *'  # every 14 minutes
   workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Wake up Render
+      - name: Ping Render API
         run: curl -s -o /dev/null https://pantrydb.onrender.com/api/items
