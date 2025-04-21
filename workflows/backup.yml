@@ -1,0 +1,27 @@
+name: Backup PantryDB
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # every 15 minutes
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Fetch pantry data from Render
+        run: |
+          curl -s https://pantrydb.onrender.com/api/items > backup.json
+
+      - name: Commit and push backup
+        run: |
+          git config user.name "Pantry Backup Bot"
+          git config user.email "bot@pantry.local"
+          git add backup.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "Backup $(date)"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
