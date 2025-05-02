@@ -1,29 +1,29 @@
+#
+#name: Backup PantryDB
+#
+#on:
+#  schedule:
+#    - cron: '*/15 * * * *' # every 15 minutes
+#  workflow_dispatch:
 
-name: Backup PantryDB
+#jobs:
+#  backup:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
 
-on:
-  schedule:
-    - cron: '*/15 * * * *' # every 15 minutes
-  workflow_dispatch:
+#      - name: Fetch pantry data from Render
+#        run: |
+#          curl -s https://pantrydb.onrender.com/api/items > backup.json
 
-jobs:
-  backup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Fetch pantry data from Render
-        run: |
-          curl -s https://pantrydb.onrender.com/api/items > backup.json
-
-      - name: Commit and push backup to pantry-ui
-        run: |
-          git config user.name "Pantry Backup Bot"
-          git config user.email "bot@pantry.local"
-          git add backup.json
-          git diff --quiet && git diff --staged --quiet || git commit -m "Backup $(date)"
-          git remote add publish https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/F4LcH100NnN/pantry-ui.git
-          git push publish HEAD:main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+#      - name: Commit and push backup to pantry-ui
+#        run: |
+#          git config user.name "Pantry Backup Bot"
+#          git config user.email "bot@pantry.local"
+#          git add backup.json
+#          git diff --quiet && git diff --staged --quiet || git commit -m "Backup $(date)"
+#          git remote add publish https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/F4LcH100NnN/pantry-ui.git
+#          git push publish HEAD:main
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
